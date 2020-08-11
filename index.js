@@ -19,10 +19,14 @@ function getLatLong(cityName) {
 }
 
 app.get('/location', (req, res) => {
-    const userInput = req.query.search;
+    try {
+        const userInput = req.query.search;
 
-    const mungedData = getLatLong(userInput);
-    res.json(mungedData);
+        const mungedData = getLatLong(userInput);
+        res.json(mungedData);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+};
 });
 
 function getWeather(lat, lon) {
@@ -39,15 +43,15 @@ function getWeather(lat, lon) {
 }
 
 app.get('/weather', (req, res) => {
-    // try {
-    const userLat = req.query.latitude;
-    const userLon = req.query.longitude;
+    try {
+        const userLat = req.query.latitude;
+        const userLon = req.query.longitude;
 
-    const mungedData = getWeather(userLat, userLon);
-    res.json(mungedData);
-    // } catch (e) {
-    //     res.status(500).json({ error: e.message });
-    // }
+        const mungedData = getWeather(userLat, userLon);
+        res.json(mungedData);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
     
 });
 
