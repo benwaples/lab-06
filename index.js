@@ -1,17 +1,24 @@
 require('dotenv').config();
 const express = require('express');
+const request = require('superagent');
 const cors = require('cors');
-const geoData = require('./data/geo.js');
 const weatherData = require('./data/weather.js');const app = express();
 const PORT = process.env.PORT || 3000;
+
+const {
+    GEOCODE_API_KEY
+} = process.env;
 
 app.use(cors());
 
 app.use(express.static('public'));
 
-function getLatLong(cityName) {
-    const city = geoData[0];
+async function getLatLong(cityName) {
+    const response = await request.get(`https://us1.locationiq.com/v1/search.php?key=${GEOCODE_API_KEY}&q=${cityName}&format=json`);
 
+    const city = response.body[0];
+
+    
     return {
         formatted_query: city.display_name,
         latitude: city.lat,
@@ -19,21 +26,23 @@ function getLatLong(cityName) {
     };
 }
 
-app.get('/location', (req, res) => {
+app.get('/location', async(req, res) => {
     try {
         const userInput = req.query.search;
 
-        const mungedData = getLatLong(userInput);
+        const mungedData = await getLatLong(userInput);
         res.json(mungedData);
     } catch (e) {
         res.status(500).json({ error: e.message });
-};
+    }
 });
 
-function getWeather(lat, lon) {
-    const data = weatherData.data;
+async function getWeather(lat, lon) {
+    const response = await request.get(`https://us1.locationiq.com/v1/search.php?key=${GEOCODE_API_KEY}&q=${cityName}&format=json`);
 
-    const forecastArray = data.map(weatherItem => {
+    const city = response.body[0];
+
+    const forecastArray = city.map(weatherItem => {
         return {
             forecast: weatherItem.weather.description,
             date: new Date(weatherItem.ts * 1000)
