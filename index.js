@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const geoData = require('./data/geo.js');
 const weatherData = require('./data/weather.js');const app = express();
-const port = process.env.port || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
@@ -57,6 +57,6 @@ app.get('/weather', (req, res) => {
 });
 
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Example app listening at http://localhost:${PORT}`);
 }); 
