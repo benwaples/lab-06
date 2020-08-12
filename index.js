@@ -73,7 +73,7 @@ async function getHike(lat, lon) {
     
     const allHikes = hikes.map(hike => {
         return {
-            trail_url: hike.trail_url,
+            trail_url: hike.url,
             name: hike.name,
             location: hike.location,
             length: hike.length,
